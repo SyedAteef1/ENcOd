@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/he/1.2.0/he.js" integrity="sha512-o4gKX6jcK0rdciOZ9X8COYkV9gviTJAbYEVW8aC3OgIRuaKDmcT9/OFXBVzHSSOxiTjsTktqrUvCUrHkQHSn9Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  
+    <title>Fake Reviews Detection</title>
+
+	<style>
+  body{
+      background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkKNj52ireQ0c_c_IwvGvjRdYv5MwD8hgd3A&usqp=CAU');
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+
+	</style>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
+  </head>
+  <body>
+
+	<nav class="navbar navbar-inverse">
+		<div class="container-fluid">
+		  <div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+			  <span class="icon-bar"></span>
+			  <span class="icon-bar"></span>
+			  <span class="icon-bar"></span>                        
+			</button>
+			<a class="navbar-brand" data-value="#form1" onclick="toggleform(event)">FAKE REVIEV</a>
+		  </div>
+		  <div class="collapse navbar-collapse" id="myNavbar">
+			<ul class="nav navbar-nav">
+			  <!-- <li ><a data-value="#form1" onclick="toggleform(event)"><span class="glyphicon glyphicon-home"></span>Home</a></li> -->
+			  <!-- <li class="dropdown">
+				<a class="dropdown-toggle" data-toggle="dropdown" href="#">Page 1 <span class="caret"></span></a>
+				<ul class="dropdown-menu">
+				  <li><a href="#">Page 1-1</a></li>
+				  <li><a href="#">Page 1-2</a></li>
+				  <li><a href="#">Page 1-3</a></li>
+				</ul>
+			  </li>
+			  <li><a href="#">Page 2</a></li>
+			  <li><a href="#">Page 3</a></li> -->
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+			  <li><a href="/logout">Logout</a></li>
+			</ul>
+		  </div>
+		</div>
+	  </nav>
+{% block content %}
+	<div class = "container">
+		{% if result %}
+		<div class="jumbotron">
+		  <h3 class="display-4"><b>Fake Reviews Detection</b></h3>
+
+		  <div class="form-group" style = "padding : 1%">
+			<label for="exampleInputEmail1">Review Text : </label> 
+			<input id = "review_text" class="form-control"  value="{{result[1]}}" hidden aria-describedby="emailHelp" readonly>
+
+		  </div>
+
+		  <div class="form-group" style = "width : 32%;float:left;padding-left : 1%; padding-right : 1%">
+			<label for="rating">Rating : </label>  
+			<input  class="form-control" id="rating" value="{{result[2]}}" hidden aria-describedby="emailHelp" readonly >
+		  </div>
+
+		  <div class="form-group" style = "width : 32%; float:left;padding-left : 1%; padding-right : 1%">
+			<label for="exampleFormControlSelect1">Verified Purchase</label>
+			<select class="form-control" id="verified_purchase">
+			  <option value = "Y">Yes</option>
+			  <option value = "N">No</option>
+
+			</select>
+		  </div>
+
+
+		  <div class="form-group" style = "width : 32%; float:left;padding-left : 1%; padding-right : 1%">
+			<label for="product_category">Product Category : </label>
+			<input  class="form-control" id="product_category" value="{{result[3]}}" hidden aria-describedby="emailHelp" readonly>
+		  </div>
+
+		  <br>
+
+		<div class="form-group" style = "padding-left : 1%; padding-right : 1%">
+			<br><br><br>
+			<a id="submit" class="btn btn-primary btn-lg" role="button" style = "color:white">Submit</a>
+		</div>
+
+		</div>
+		<div class="jumbotron">
+			<div class="form-group">
+  
+			  <h3><b>Result</b></h3>
+  
+			  <img id="loader" src = "static/loader.gif" style = "width : 30px;height:30px">
+  
+			  <p id = "result"></p>
+  
+			</div>
+  
+		  </div>
+		{% endif %}
+		{% if result1 %}
+		<div class="jumbotron">
+			<h3 class="display-4"><b>Serach</b></h3>
+			<form action="/search" method="post">
+			<div class="form-group" style = "padding : 1%">
+			  <label for="email">Email: </label>
+				<select id = "email" class="form-control"  aria-describedby="emailHelp" name="email" required>
+					<option value="">-- select email --</option>
+					{% for val in result1 %}
+					<option value="{{val[0]}}">{{val[0]}}</option>
+					{% endfor %}
+				</select>
+			</div>
+			<div class="form-group" style = "padding-left : 1%; padding-right : 1%">
+				<br><br><br>
+				<input type="submit" class="btn btn-primary btn-lg" value="Submit" style = "color:white">
+			</div>
+		</form>
+			</div>
+		{% endif %}
+
+		
+  
+	</div>
+
+
+	<script>
+
+		$("#result").hide();
+		$("#loader").hide();
+
+		$("#submit").click(function(){
+			review_text = $("#review_text").val();
+			rating = $("#rating").val();
+			verified_purchase = $("#verified_purchase").val();
+			product_category = $("#product_category").val();
+
+			//alert(verified_purchase);
+
+			$("#result").hide();
+			$("#loader").show();
+
+			var data = {};
+
+			data["review_text"] = review_text;
+			data["rating"] = rating;
+			data["verified_purchase"] = verified_purchase;
+			data["product_category"] = product_category;
+
+			console.log(JSON.stringify(data));
+
+			$.ajax({
+					  type: 'POST',
+					  url: '/api/bot',
+					  dataType: 'json',
+
+					  data: data,
+					  success: function(callback) {
+						  console.log(callback);
+						  $("#result").show();
+
+							$("#result").text(callback.result);
+						  
+						  $("#loader").hide();
+					  },
+					  error: function (jqXHR, exception) {
+
+						$("#result").hide();
+
+						var msg = '';
+						msg = jqXHR.responseText;
+						console.log(msg);
+						//alert(msg);
+						$("#loader").hide();
+					},
+				  });
+
+
+
+		});
+
+
+
+
+	</script>
+{% endblock content %}
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  </body>
+</html>
